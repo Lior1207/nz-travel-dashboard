@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shwarzwald Family Trip 2026</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0f1117;
+    color: #e2e8f0;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    background: linear-gradient(135deg, #1a1f35 0%, #0f1117 100%);
+    border-bottom: 1px solid #1e2a45;
+    padding: 2.5rem 2rem 2rem;
+    text-align: center;
+  }
+
+  header .flag-row { font-size: 2rem; letter-spacing: 0.5rem; margin-bottom: 0.75rem; }
+  header h1 { font-size: 1.9rem; font-weight: 700; color: #f0f4ff; }
+  header .subtitle { margin-top: 0.4rem; color: #7891b5; font-size: 0.95rem; }
+
+  .countdown-bar {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .countdown-unit {
+    background: #1a2540;
+    border: 1px solid #263a5e;
+    border-radius: 10px;
+    padding: 0.6rem 1.2rem;
+    text-align: center;
+    min-width: 72px;
+  }
+
+  .countdown-unit .num {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #60a5fa;
+    line-height: 1;
+  }
+
+  .countdown-unit .label {
+    font-size: 0.68rem;
+    color: #5a7aaa;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 0.2rem;
+  }
+
+  /* ── Layout ── */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+    display: grid;
+    gap: 2rem;
+  }
+
+  /* ── Section header ── */
+  .section-title {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #5a7aaa;
+    margin-bottom: 1rem;
+  }
+
+  /* ── Cards ── */
+  .card {
+    background: #141927;
+    border: 1px solid #1e2a45;
+    border-radius: 14px;
+    padding: 1.5rem;
+  }
+
+  .card h2 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #c8d8f0;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* ── Route strip ── */
+  .route-strip {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+
+  .route-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 90px;
+  }
+
+  .route-node .dot {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    border: 2px solid;
+    background: #0f1117;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .route-node .dot.confirmed { border-color: #22c55e; background: #052e16; }
+  .route-node .dot.partial   { border-color: #f59e0b; background: #1c0e00; }
+  .route-node .dot.tbd       { border-color: #475569; background: #0f1117; }
+
+  .route-node .name {
+    font-size: 0.72rem;
+    color: #94a3b8;
+    margin-top: 0.4rem;
+    text-align: center;
+    max-width: 80px;
+    line-height: 1.3;
+  }
+
+  .route-node .week {
+    font-size: 0.65rem;
+    color: #3d5a80;
+    text-align: center;
+    margin-top: 0.15rem;
+  }
+
+  .route-line {
+    flex: 1;
+    height: 2px;
+    background: #1e2a45;
+    min-width: 20px;
+    position: relative;
+    top: -18px;
+  }
+
+  /* ── Phase grid ── */
+  .phase-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .phase-card {
+    background: #0f1420;
+    border: 1px solid #1e2a45;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .phase-header {
+    padding: 0.9rem 1.25rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .phase-header.far-east  { background: #1a1535; color: #a78bfa; border-bottom: 1px solid #2d1f55; }
+  .phase-header.north-nz  { background: #0d2118; color: #4ade80; border-bottom: 1px solid #143520; }
+  .phase-header.south-nz  { background: #0d1e2a; color: #38bdf8; border-bottom: 1px solid #1a3245; }
+
+  .phase-body { padding: 1rem 1.25rem; }
+
+  .stop-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid #1a2235;
+    font-size: 0.87rem;
+  }
+
+  .stop-item:last-child { border-bottom: none; }
+
+  .stop-status {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+
+  .stop-status.confirmed { background: #22c55e; }
+  .stop-status.partial   { background: #f59e0b; }
+  .stop-status.tbd       { background: #475569; }
+
+  .stop-name { color: #c8d8f0; }
+  .stop-note { color: #5a7aaa; font-size: 0.78rem; margin-left: auto; text-align: right; }
+
+  .kid-tag {
+    font-size: 0.68rem;
+    background: #1e2a45;
+    color: #60a5fa;
+    padding: 0.1rem 0.45rem;
+    border-radius: 99px;
+    margin-left: 0.3rem;
+    white-space: nowrap;
+  }
+
+  /* ── Two-col layout ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+
+  @media (max-width: 640px) {
+    .two-col { grid-template-columns: 1fr; }
+  }
+
+  /* ── Timeline ── */
+  .timeline-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid #1a2235;
+  }
+
+  .timeline-row:last-child { border-bottom: none; }
+
+  .tl-month {
+    min-width: 80px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #60a5fa;
+  }
+
+  .tl-tasks { flex: 1; }
+
+  .tl-task {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    margin-bottom: 0.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .tl-badge {
+    font-size: 0.67rem;
+    font-weight: 600;
+    padding: 0.1rem 0.5rem;
+    border-radius: 99px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    flex-shrink: 0;
+  }
+
+  .badge-now    { background: #1d3520; color: #4ade80; border: 1px solid #166534; }
+  .badge-soon   { background: #2d1f05; color: #fbbf24; border: 1px solid #92400e; }
+  .badge-later  { background: #1e2a45; color: #7891b5; border: 1px solid #334155; }
+
+  /* ── TBD list ── */
+  .tbd-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .tbd-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    background: #0f1117;
+    border: 1px solid #1e2a45;
+    border-radius: 8px;
+    padding: 0.65rem 0.9rem;
+    font-size: 0.87rem;
+  }
+
+  .tbd-icon { font-size: 1rem; flex-shrink: 0; }
+
+  .tbd-text { color: #94a3b8; }
+  .tbd-text strong { color: #c8d8f0; display: block; margin-bottom: 0.1rem; }
+
+  .priority-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+
+  .p-high   { background: #ef4444; }
+  .p-medium { background: #f59e0b; }
+  .p-low    { background: #475569; }
+
+  /* ── Kids highlight ── */
+  .kids-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  .kid-card {
+    background: #0f1117;
+    border: 1px solid #1e2a45;
+    border-radius: 10px;
+    padding: 0.9rem 1rem;
+  }
+
+  .kid-card .kid-name {
+    font-weight: 600;
+    color: #c8d8f0;
+    margin-bottom: 0.2rem;
+    font-size: 0.92rem;
+  }
+
+  .kid-card .kid-age { font-size: 0.75rem; color: #5a7aaa; margin-bottom: 0.6rem; }
+
+  .highlight-list { list-style: none; }
+  .highlight-list li {
+    font-size: 0.8rem;
+    color: #7891b5;
+    padding: 0.2rem 0;
+    padding-left: 1rem;
+    position: relative;
+  }
+
+  .highlight-list li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: #3d5a80;
+  }
+
+  /* ── Legend ── */
+  .legend {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.78rem;
+    color: #5a7aaa;
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  /* ── Hotels Panel ── */
+  .hotel-toggle {
+    width: 100%;
+    background: #141927;
+    border: 1px solid #1e2a45;
+    border-radius: 14px;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    color: #c8d8f0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: left;
+    transition: background 0.15s;
+  }
+
+  .hotel-toggle:hover { background: #1a2235; }
+
+  .hotel-toggle .ht-chevron {
+    margin-left: auto;
+    color: #3d5a80;
+    font-size: 0.75rem;
+    transition: transform 0.2s;
+  }
+
+  .hotel-toggle.is-open { border-radius: 14px 14px 0 0; border-bottom-color: transparent; }
+  .hotel-toggle.is-open .ht-chevron { transform: rotate(180deg); }
+
+  .hotel-body {
+    display: none;
+    background: #141927;
+    border: 1px solid #1e2a45;
+    border-top: none;
+    border-radius: 0 0 14px 14px;
+    padding: 1.25rem;
+  }
+
+  .hotel-body.is-open { display: block; }
+
+  .hotel-empty {
+    text-align: center;
+    color: #2d4060;
+    font-size: 0.85rem;
+    padding: 1rem 0;
+  }
+
+  .hotel-card {
+    background: #0d1826;
+    border: 1px solid #1a3a5e;
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .hotel-card:last-child { margin-bottom: 0; }
+
+  .hotel-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .hotel-name { font-weight: 600; color: #60a5fa; font-size: 0.95rem; }
+  .hotel-city { font-size: 0.75rem; color: #4a6a9a; margin-top: 0.15rem; }
+
+  .hotel-booked-via {
+    font-size: 0.7rem;
+    background: #0f1a30;
+    color: #4a6a9a;
+    border: 1px solid #1a3a5e;
+    padding: 0.2rem 0.6rem;
+    border-radius: 99px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .hotel-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    font-size: 0.8rem;
+    color: #7891b5;
+  }
+
+  .hotel-meta-item { display: flex; flex-direction: column; gap: 0.1rem; }
+  .hotel-meta-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.07em; color: #2d4060; }
+  .hotel-meta-value { color: #94a3b8; }
+  .hotel-confirmation { font-family: monospace; color: #60a5fa; background: #0f1a30; padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.82rem; }
+
+  /* ── Calendar ── */
+  .cal-months { display: flex; flex-direction: column; gap: 1.5rem; }
+
+  .cal-month {
+    background: #141927;
+    border: 1px solid #1e2a45;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .cal-month-header {
+    padding: 1rem 1.25rem;
+    font-weight: 600;
+    color: #c8d8f0;
+    font-size: 1rem;
+    border-bottom: 1px solid #1e2a45;
+  }
+
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
+
+  .cal-dow {
+    padding: 0.5rem 0.6rem;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: #2d4060;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-bottom: 1px solid #1a2235;
+    text-align: center;
+  }
+
+  .cal-cell {
+    min-height: 90px;
+    padding: 0.5rem 0.6rem;
+    border-right: 1px solid #1a2235;
+    border-bottom: 1px solid #1a2235;
+  }
+
+  .cal-cell.empty   { background: #0c0f18; border-color: #131826; }
+  .cal-cell.open    { background: #0f1420; }
+  .cal-cell.flight  { background: #052e16; border-color: #1a4d2a; }
+  .cal-cell.hotel   { background: #0d1826; border-color: #1a3050; }
+
+  .cal-day-num {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #2d4060;
+    margin-bottom: 0.35rem;
+  }
+
+  .cal-cell.flight .cal-day-num { color: #4a7c59; }
+  .cal-cell.hotel  .cal-day-num { color: #3a5a8a; }
+
+  /* flight event lines */
+  .cal-flight-label { font-size: 0.71rem; color: #4ade80; line-height: 1.35; }
+  .cal-flight-sub   { font-size: 0.64rem; color: #3a6b4a; margin-top: 0.1rem; }
+
+  /* hotel badge in cell */
+  .cal-hotel-badge {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.3rem;
+    background: #0f1a2e;
+    border: 1px solid #1a3050;
+    border-radius: 5px;
+    padding: 0.25rem 0.4rem;
+    margin-top: 0.2rem;
+  }
+
+  .cal-hotel-badge-icon { font-size: 0.7rem; flex-shrink: 0; margin-top: 1px; }
+  .cal-hotel-badge-name { font-size: 0.67rem; color: #60a5fa; line-height: 1.35; }
+  .cal-hotel-badge-sub  { font-size: 0.61rem; color: #3a5a8a; margin-top: 0.05rem; }
+
+  /* activity badge in cell */
+  .cal-activity-badge {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.3rem;
+    background: #1c1200;
+    border: 1px solid #5c3200;
+    border-radius: 5px;
+    padding: 0.25rem 0.4rem;
+    margin-top: 0.2rem;
+  }
+
+  .cal-activity-badge-icon { font-size: 0.7rem; flex-shrink: 0; margin-top: 1px; }
+  .cal-activity-badge-name { font-size: 0.67rem; color: #fbbf24; line-height: 1.35; }
+  .cal-activity-badge-sub  { font-size: 0.61rem; color: #7a5000; margin-top: 0.05rem; }
+
+  /* sleep location line */
+  .cal-sleep {
+    margin-top: 0.4rem;
+    font-size: 0.64rem;
+    color: #2d4060;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .cal-cell.flight .cal-sleep { color: #3a6b4a; }
+  .cal-cell.hotel  .cal-sleep { color: #3a5a8a; }
+
+  .cal-sleep::before {
+    content: '';
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+  }
+
+  /* ── Footer ── */
+  footer {
+    text-align: center;
+    padding: 1.5rem;
+    color: #2d4060;
+    font-size: 0.78rem;
+    border-top: 1px solid #1e2a45;
+    margin-top: 1rem;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="flag-row">🇮🇱 ✈️ 🌏 🇳🇿</div>
+  <h1>Shwarzwald Family Trip 2026</h1>
+  <div class="subtitle">Lior · Sivan · Aviv (10) · Yarden (7) · Gili (4) &nbsp;|&nbsp; ~3 months &nbsp;|&nbsp; Far East + New Zealand</div>
+
+  <div class="countdown-bar" id="countdown">
+    <div class="countdown-unit"><div class="num" id="cd-months">—</div><div class="label">Months</div></div>
+    <div class="countdown-unit"><div class="num" id="cd-weeks">—</div><div class="label">Weeks</div></div>
+    <div class="countdown-unit"><div class="num" id="cd-days">—</div><div class="label">Days</div></div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ── Route Overview ── -->
+  <div class="card">
+    <div class="section-title">Route at a glance</div>
+    <div class="route-strip">
+      <div class="route-node">
+        <div class="dot confirmed">🇮🇱</div>
+        <div class="name">Tel Aviv</div>
+        <div class="week">1 Nov, 21:30</div>
+      </div>
+      <div class="route-line"></div>
+      <div class="route-node">
+        <div class="dot confirmed">🇹🇭</div>
+        <div class="name">Bangkok</div>
+        <div class="week">2–3 Nov</div>
+      </div>
+      <div class="route-line"></div>
+      <div class="route-node">
+        <div class="dot confirmed">🇦🇺</div>
+        <div class="name">Sydney</div>
+        <div class="week">4–9 Nov</div>
+      </div>
+      <div class="route-line"></div>
+      <div class="route-node">
+        <div class="dot confirmed">🇳🇿</div>
+        <div class="name">Christchurch</div>
+        <div class="week">9 Nov</div>
+      </div>
+      <div class="route-line"></div>
+      <div class="route-node">
+        <div class="dot tbd">❄️</div>
+        <div class="name">South Island</div>
+        <div class="week">Nov–Dec</div>
+      </div>
+      <div class="route-line"></div>
+      <div class="route-node">
+        <div class="dot tbd">🏔️</div>
+        <div class="name">North Island</div>
+        <div class="week">Dec–Jan</div>
+      </div>
+      <div class="route-line"></div>
+      <div class="route-node">
+        <div class="dot tbd">🏠</div>
+        <div class="name">Home</div>
+        <div class="week">Jan 2027</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Confirmed Flights ── -->
+  <div class="card">
+    <div class="section-title">Confirmed flights</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;">
+
+      <div style="background:#052e16;border:1px solid #166534;border-radius:10px;padding:1rem;">
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem;">
+          <span style="font-size:1.1rem;">✈️</span>
+          <span style="font-weight:600;color:#4ade80;font-size:0.95rem;">TLV → BKK</span>
+          <span style="margin-left:auto;font-size:0.72rem;color:#166534;background:#052e16;border:1px solid #166534;padding:0.1rem 0.5rem;border-radius:99px;font-weight:600;">CONFIRMED</span>
+        </div>
+        <div style="font-size:0.82rem;color:#86efac;line-height:1.9;">
+          <div><span style="color:#4a7c59;min-width:70px;display:inline-block;">Flight</span> El Al LY083 · Boeing 777</div>
+          <div><span style="color:#4a7c59;min-width:70px;display:inline-block;">Departs</span> Sun 1 Nov, 21:30 (TLV T3)</div>
+          <div><span style="color:#4a7c59;min-width:70px;display:inline-block;">Arrives</span> Mon 2 Nov, 13:50 (BKK)</div>
+          <div><span style="color:#4a7c59;min-width:70px;display:inline-block;">Duration</span> 11h 20m · 5 meals</div>
+        </div>
+      </div>
+
+      <div style="background:#052e16;border:1px solid #166534;border-radius:10px;padding:1rem;">
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem;">
+          <span style="font-size:1.1rem;">✈️</span>
+          <span style="font-weight:600;color:#4ade80;font-size:0.95rem;">BKK → SYD</span>
+          <span style="margin-left:auto;font-size:0.72rem;color:#166534;background:#052e16;border:1px solid #166534;padding:0.1rem 0.5rem;border-radius:99px;font-weight:600;">CONFIRMED</span>
+        </div>
+        <div style="font-size:0.82rem;color:#86efac;line-height:1.9;">
+          <div><span style="color:#4a7c59;min-width:70px;display:inline-block;">Flight</span> Emirates EK5151 · A330-200</div>
+          <div><span style="color:#4a7c59;min-width:70px;display:inline-block;">Ref</span> P4ZBKW</div>
+          <div><span style="color:#4a7c59;min-width:70px;display:inline-block;">Departs</span> Tue 3 Nov, 18:00 (BKK)</div>
+          <div><span style="color:#4a7c59;min-width:70px;display:inline-block;">Arrives</span> Wed 4 Nov, 07:35 (SYD)</div>
+          <div><span style="color:#4a7c59;min-width:70px;display:inline-block;">Duration</span> 9h 35m · Economy/Saver</div>
+        </div>
+      </div>
+
+      <div style="background:#052e16;border:1px solid #166534;border-radius:10px;padding:1rem;">
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem;">
+          <span style="font-size:1.1rem;">✈️</span>
+          <span style="font-weight:600;color:#4ade80;font-size:0.95rem;">SYD → CHC</span>
+          <span style="margin-left:auto;font-size:0.72rem;color:#166534;background:#052e16;border:1px solid #166534;padding:0.1rem 0.5rem;border-radius:99px;font-weight:600;">CONFIRMED</span>
+        </div>
+        <div style="font-size:0.82rem;color:#86efac;line-height:1.9;">
+          <div><span style="color:#4a7c59;min-width:70px;display:inline-block;">Flight</span> Emirates EK412 · A380-800</div>
+          <div><span style="color:#4a7c59;min-width:70px;display:inline-block;">Ref</span> NTVC7F</div>
+          <div><span style="color:#4a7c59;min-width:70px;display:inline-block;">Departs</span> Mon 9 Nov, 08:45 (SYD)</div>
+          <div><span style="color:#4a7c59;min-width:70px;display:inline-block;">Arrives</span> Mon 9 Nov, 14:00 (CHC)</div>
+          <div><span style="color:#4a7c59;min-width:70px;display:inline-block;">Duration</span> 3h 15m · Economy/Flex</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ── Hotels ── -->
+  <div>
+    <div class="section-title">Accommodation</div>
+    <button class="hotel-toggle" id="hotel-toggle" onclick="toggleHotels()">
+      🏨 Hotels &amp; Accommodation
+      <span id="hotel-count" style="font-size:0.75rem;font-weight:400;color:#3d5a80;">— 0 confirmed</span>
+      <span class="ht-chevron">▼</span>
+    </button>
+    <div class="hotel-body" id="hotel-body">
+      <div id="hotel-list-root"></div>
+    </div>
+  </div>
+
+  <!-- ── Schedule / Calendar ── -->
+  <div>
+    <div class="section-title">Schedule</div>
+    <div id="calendar-root"></div>
+  </div>
+
+</main>
+
+<footer>Shwarzwald Family Trip Planner · Updated April 2026 · <span id="last-updated"></span></footer>
+
+<script src="trip-data.js"></script>
+<script>
+  // Countdown to Oct 1 2026
+  function updateCountdown() {
+    const departure = new Date('2026-11-01T00:00:00');
+    const now = new Date();
+    const diff = departure - now;
+
+    if (diff <= 0) {
+      document.getElementById('cd-months').textContent = '0';
+      document.getElementById('cd-weeks').textContent  = '0';
+      document.getElementById('cd-days').textContent   = '0';
+      return;
+    }
+
+    const totalDays  = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const months     = Math.floor(totalDays / 30.44);
+    const weeks      = Math.floor(totalDays / 7);
+
+    document.getElementById('cd-months').textContent = months;
+    document.getElementById('cd-weeks').textContent  = weeks;
+    document.getElementById('cd-days').textContent   = totalDays;
+  }
+
+  updateCountdown();
+  setInterval(updateCountdown, 60000);
+
+
+  const MONTHS = [
+    { year: 2026, month: 10 },
+    { year: 2026, month: 11 },
+    { year: 2027, month: 0  },
+  ];
+
+  // ── Hotels Panel ──────────────────────────────────────
+  function toggleHotels() {
+    const btn  = document.getElementById('hotel-toggle');
+    const body = document.getElementById('hotel-body');
+    btn.classList.toggle('is-open');
+    body.classList.toggle('is-open');
+  }
+
+  function renderHotels() {
+    const root = document.getElementById('hotel-list-root');
+    document.getElementById('hotel-count').textContent =
+      HOTELS.length ? `— ${HOTELS.length} confirmed` : '— 0 confirmed';
+
+    if (!HOTELS.length) {
+      root.innerHTML = `<div class="hotel-empty">No hotels booked yet — they'll appear here as you confirm them.</div>`;
+      return;
+    }
+
+    root.innerHTML = HOTELS.map(h => {
+      const ci = new Date(h.checkIn  + 'T12:00:00').toLocaleDateString('en-GB', { day:'numeric', month:'short' });
+      const co = new Date(h.checkOut + 'T12:00:00').toLocaleDateString('en-GB', { day:'numeric', month:'short' });
+      return `
+        <div class="hotel-card">
+          <div class="hotel-card-top">
+            <div>
+              <div class="hotel-name">${h.name}</div>
+              <div class="hotel-city">📍 ${h.city}</div>
+            </div>
+            <div class="hotel-booked-via">${h.bookedVia}</div>
+          </div>
+          <div class="hotel-card-meta">
+            <div class="hotel-meta-item">
+              <span class="hotel-meta-label">Check-in</span>
+              <span class="hotel-meta-value">${ci}</span>
+            </div>
+            <div class="hotel-meta-item">
+              <span class="hotel-meta-label">Check-out</span>
+              <span class="hotel-meta-value">${co}</span>
+            </div>
+            <div class="hotel-meta-item">
+              <span class="hotel-meta-label">Nights</span>
+              <span class="hotel-meta-value">${h.nights}</span>
+            </div>
+            <div class="hotel-meta-item">
+              <span class="hotel-meta-label">Confirmation</span>
+              <span class="hotel-confirmation">${h.confirmation}</span>
+            </div>
+            ${h.notes ? `<div class="hotel-meta-item" style="grid-column:1/-1"><span class="hotel-meta-label">Notes</span><span class="hotel-meta-value">${h.notes}</span></div>` : ''}
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  // ── Calendar ──────────────────────────────────────────
+  function dateKey(y, m, d) {
+    return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+  }
+
+  function buildDayIndex() {
+    const idx = {}; // date → { flight, hotel, activities, sleep }
+
+    FLIGHTS.forEach(f => {
+      idx[f.date] = idx[f.date] || {};
+      idx[f.date].flight = f;
+      if (f.sleep) idx[f.date].sleep = f.sleep;
+    });
+
+    Object.entries(KNOWN_STAYS).forEach(([date, city]) => {
+      idx[date] = idx[date] || {};
+      idx[date].sleep = city;
+    });
+
+    HOTELS.forEach(h => {
+      // mark each night of stay
+      let cur = new Date(h.checkIn + 'T12:00:00');
+      const out = new Date(h.checkOut + 'T12:00:00');
+      while (cur < out) {
+        const key = cur.toISOString().slice(0,10);
+        idx[key] = idx[key] || {};
+        idx[key].hotel = h;
+        idx[key].sleep = h.name;
+        cur.setDate(cur.getDate() + 1);
+      }
+    });
+
+    ACTIVITIES.forEach(a => {
+      idx[a.date] = idx[a.date] || {};
+      idx[a.date].activities = idx[a.date].activities || [];
+      idx[a.date].activities.push(a);
+    });
+
+    return idx;
+  }
+
+  function buildCalendar() {
+    const idx  = buildDayIndex();
+    const root = document.getElementById('calendar-root');
+    const wrap = document.createElement('div');
+    wrap.className = 'cal-months';
+
+    MONTHS.forEach(({ year, month }) => {
+      const monthDiv = document.createElement('div');
+      monthDiv.className = 'cal-month';
+      const monthName = new Date(year, month, 1)
+        .toLocaleString('en-GB', { month: 'long', year: 'numeric' });
+      monthDiv.innerHTML = `<div class="cal-month-header">${monthName}</div>`;
+
+      const grid = document.createElement('div');
+      grid.className = 'cal-grid';
+      ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].forEach(d => {
+        grid.innerHTML += `<div class="cal-dow">${d}</div>`;
+      });
+
+      const offset   = (new Date(year, month, 1).getDay() + 6) % 7;
+      const daysInMo = new Date(year, month + 1, 0).getDate();
+
+      for (let i = 0; i < offset; i++)
+        grid.innerHTML += `<div class="cal-cell empty"></div>`;
+
+      for (let d = 1; d <= daysInMo; d++) {
+        const key  = dateKey(year, month, d);
+        const day  = idx[key] || {};
+        const hasFlight   = !!day.flight;
+        const hasHotel    = !!day.hotel;
+        const hasActivity = !!(day.activities && day.activities.length);
+
+        let cls   = hasFlight ? 'cal-cell flight' : hasHotel ? 'cal-cell hotel' : 'cal-cell open';
+        let inner = `<div class="cal-day-num">${d}</div>`;
+
+        // Flight line
+        if (hasFlight) {
+          inner += `<div class="cal-flight-label">${day.flight.label}</div>`;
+          inner += `<div class="cal-flight-sub">${day.flight.sub}</div>`;
+        }
+
+        // Hotel badge
+        if (hasHotel) {
+          const checkInKey = day.hotel.checkIn;
+          const isArrival  = key === checkInKey;
+          inner += `
+            <div class="cal-hotel-badge">
+              <span class="cal-hotel-badge-icon">🏨</span>
+              <div>
+                <div class="cal-hotel-badge-name">${day.hotel.name}</div>
+                <div class="cal-hotel-badge-sub">${isArrival ? 'Check-in' : 'Staying'} · ${day.hotel.bookedVia}</div>
+              </div>
+            </div>`;
+        }
+
+        // Activity badges
+        if (hasActivity) {
+          day.activities.forEach(a => {
+            inner += `
+              <div class="cal-activity-badge">
+                <span class="cal-activity-badge-icon">⭐</span>
+                <div>
+                  <div class="cal-activity-badge-name">${a.label}</div>
+                  ${a.time ? `<div class="cal-activity-badge-sub">${a.time}</div>` : ''}
+                </div>
+              </div>`;
+          });
+        }
+
+        // Sleep location (if no hotel badge already covers it)
+        if (day.sleep && !hasHotel) {
+          inner += `<div class="cal-sleep">${day.sleep}</div>`;
+        }
+
+        grid.innerHTML += `<div class="${cls}">${inner}</div>`;
+      }
+
+      const total = offset + daysInMo;
+      for (let i = 0; i < (7 - (total % 7)) % 7; i++)
+        grid.innerHTML += `<div class="cal-cell empty"></div>`;
+
+      monthDiv.appendChild(grid);
+      wrap.appendChild(monthDiv);
+    });
+
+    root.appendChild(wrap);
+  }
+
+  renderHotels();
+  buildCalendar();
+
+  // Last updated
+  document.getElementById('last-updated').textContent =
+    'Last updated ' + new Date().toLocaleDateString('en-GB', {day:'numeric', month:'long', year:'numeric'});
+</script>
+
+</body>
+</html>
