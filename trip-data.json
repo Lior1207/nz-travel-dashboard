@@ -47,6 +47,16 @@
       "confirmation": "",
       "bookedVia": "Private stay",
       "notes": ""
+    },
+    {
+      "name": "Otamahua/Quail Island hut",
+      "city": "Located in Christchurch area and Ōtamahua/Quail Island Recreation Reserve in the Canterbury region",
+      "checkIn": "2026-11-14",
+      "checkOut": "2026-11-15",
+      "nights": 1,
+      "bookedVia": "Other",
+      "confirmation": "",
+      "notes": ""
     }
   ],
   "ACTIVITIES": [
