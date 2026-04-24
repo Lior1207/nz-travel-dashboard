@@ -330,6 +330,11 @@
 
     <!-- Todos -->
     <div class="panel" id="panel-todos">
+      <div class="field"><label>Task (English)</label><input type="text" id="t-label" placeholder="e.g. Book campervan"></div>
+      <div class="field"><label>Task (עברית — optional)</label><input type="text" id="t-label-he" placeholder="e.g. להזמין קמפרוון"></div>
+      <div class="field"><label>Notes (optional)</label><input type="text" id="t-notes" placeholder="Any extra detail"></div>
+      <button class="btn-save" onclick="saveTodo()">Add Task</button>
+      <hr class="divider">
       <p style="font-size:0.85rem;color:#5a7aaa;margin-bottom:1rem;">Tap any item to mark it done.</p>
       <div id="todos-list"></div>
     </div>
@@ -463,6 +468,21 @@
   }
 
   // ── Todos ──────────────────────────────────────────
+  async function saveTodo() {
+    const label = document.getElementById('t-label').value.trim();
+    if (!label) { showToast('Enter a task name', true); return; }
+    const id = 'todo-' + Date.now();
+    await save('addTodo', {
+      id,
+      label,
+      labelHe: document.getElementById('t-label-he').value.trim() || label,
+      notes:   document.getElementById('t-notes').value.trim(),
+      notesHe: document.getElementById('t-notes').value.trim(),
+      done: false,
+    });
+    ['t-label','t-label-he','t-notes'].forEach(id => document.getElementById(id).value = '');
+  }
+
   async function toggleTodo(id, currentDone) {
     await save('toggleTodo', { id, done: !currentDone });
   }
