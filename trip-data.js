@@ -35,3 +35,12 @@ const HOTELS = [
 const ACTIVITIES = [
   // { date: '2026-11-15', label: 'Hobbiton Tour', time: '10:00', notes: 'Ref XYZ' },
 ];
+
+const TODOS = [
+  { id: 'passports',    label: 'New passports',                    notes: 'All 5 family members',              done: false },
+  { id: 'visas-au',     label: 'Australia visas (ETA)',             notes: 'Apply online at immi.homeaffairs.gov.au', done: false },
+  { id: 'visas-nz',     label: 'New Zealand visas (NZeTA)',         notes: 'Apply via the NZeTA app',           done: false },
+  { id: 'insurance',    label: 'Travel insurance',                  notes: '3-month multi-country, family of 5', done: false },
+  { id: 'intl-license', label: 'International driving licence',     notes: 'Apply at post office (Lior + Sivan)', done: false },
+  { id: 'vaccinations', label: 'Vaccinations',                      notes: 'Check requirements per country',    done: false },
+];

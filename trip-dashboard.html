@@ -575,6 +575,54 @@
     flex-shrink: 0;
   }
 
+  /* ── Todos ── */
+  .todo-list { display: flex; flex-direction: column; gap: 0.5rem; }
+
+  .todo-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    background: #0f1420;
+    border: 1px solid #1e2a45;
+    border-radius: 9px;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    transition: background 0.1s;
+    user-select: none;
+  }
+
+  .todo-item:hover { background: #141d30; }
+
+  .todo-item.done {
+    opacity: 0.45;
+    border-color: #141d2e;
+  }
+
+  .todo-check {
+    width: 18px;
+    height: 18px;
+    border-radius: 5px;
+    border: 2px solid #2d4060;
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    color: #4ade80;
+    transition: background 0.15s, border-color 0.15s;
+  }
+
+  .todo-item.done .todo-check {
+    background: #052e16;
+    border-color: #166534;
+  }
+
+  .todo-text { flex: 1; }
+  .todo-label { font-size: 0.88rem; color: #c8d8f0; font-weight: 500; }
+  .todo-item.done .todo-label { text-decoration: line-through; color: #3d5a80; }
+  .todo-notes { font-size: 0.75rem; color: #3d5a80; margin-top: 0.15rem; }
+
   /* ── Footer ── */
   footer {
     text-align: center;
@@ -701,6 +749,12 @@
 
     </div>
 
+  </div>
+
+  <!-- ── Todos ── -->
+  <div>
+    <div class="section-title">To Do</div>
+    <div class="todo-list" id="todo-list"></div>
   </div>
 
   <!-- ── Hotels ── -->
@@ -942,6 +996,33 @@
     root.appendChild(wrap);
   }
 
+  // ── Todos ──────────────────────────────────────────────
+  function renderTodos() {
+    const root  = document.getElementById('todo-list');
+    const state = JSON.parse(localStorage.getItem('todo-state') || '{}');
+
+    root.innerHTML = TODOS.map(t => {
+      const done = state[t.id] ?? t.done;
+      return `
+        <div class="todo-item ${done ? 'done' : ''}" onclick="toggleTodo('${t.id}')">
+          <div class="todo-check">${done ? '✓' : ''}</div>
+          <div class="todo-text">
+            <div class="todo-label">${t.label}</div>
+            ${t.notes ? `<div class="todo-notes">${t.notes}</div>` : ''}
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  function toggleTodo(id) {
+    const state = JSON.parse(localStorage.getItem('todo-state') || '{}');
+    const current = state[id] ?? TODOS.find(t => t.id === id).done;
+    state[id] = !current;
+    localStorage.setItem('todo-state', JSON.stringify(state));
+    renderTodos();
+  }
+
+  renderTodos();
   renderHotels();
   buildCalendar();
 
