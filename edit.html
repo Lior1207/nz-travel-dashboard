@@ -122,6 +122,17 @@
   .btn-save:hover    { background: #1a7a3e; }
   .btn-save:disabled { background: #0f2e1a; color: #2d6b40; cursor: not-allowed; }
 
+  .cancel-edit {
+    display: none;
+    text-align: center;
+    color: #5a7aaa;
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding: 0.6rem;
+    margin-top: 0.25rem;
+  }
+  .cancel-edit:hover { color: #94a3b8; }
+
   /* ── Toast ── */
   #toast {
     position: fixed;
@@ -144,7 +155,14 @@
 
   /* ── Existing items list ── */
   .existing { margin-top: 1.5rem; }
-  .existing h3 { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #3d5a80; margin-bottom: 0.75rem; }
+  .existing h3 {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #3d5a80;
+    margin-bottom: 0.75rem;
+  }
 
   .item-row {
     display: flex;
@@ -161,6 +179,21 @@
   .item-row .item-label { font-size: 0.88rem; color: #c8d8f0; }
   .item-row .item-sub   { font-size: 0.75rem; color: #5a7aaa; margin-top: 0.1rem; }
 
+  .item-actions { display: flex; gap: 0.4rem; flex-shrink: 0; }
+
+  .btn-edit {
+    background: none;
+    border: 1px solid #1e3660;
+    border-radius: 6px;
+    color: #3d6090;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.6rem;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .btn-edit:hover { background: #1a2e50; color: #60a5fa; border-color: #3a6aaa; }
+
   .btn-delete {
     background: none;
     border: 1px solid #3d2020;
@@ -175,22 +208,28 @@
 
   .btn-delete:hover { background: #3d1515; color: #fca5a5; border-color: #7f1d1d; }
 
-  /* ── Todo checkboxes ── */
+  /* ── Todo rows ── */
   .todo-check-row {
     display: flex;
     align-items: center;
-    gap: 0.85rem;
     background: #141927;
     border: 1px solid #1e2a45;
     border-radius: 8px;
-    padding: 0.85rem 1rem;
+    padding: 0.7rem 0.75rem;
     margin-bottom: 0.5rem;
-    cursor: pointer;
-    transition: background 0.1s;
+    gap: 0.5rem;
   }
 
-  .todo-check-row:hover { background: #1a2235; }
-  .todo-check-row.done  { opacity: 0.5; }
+  .todo-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
+    cursor: pointer;
+    min-width: 0;
+  }
+
+  .todo-check-row.done .todo-toggle { opacity: 0.5; }
 
   .todo-box {
     width: 20px;
@@ -207,7 +246,7 @@
   }
 
   .todo-check-row.done .todo-box { background: #052e16; border-color: #166534; }
-  .todo-name { font-size: 0.9rem; color: #c8d8f0; }
+  .todo-name { font-size: 0.9rem; color: #c8d8f0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .todo-check-row.done .todo-name { text-decoration: line-through; color: #3d5a80; }
 
   /* ── Section divider ── */
@@ -242,6 +281,19 @@
 
   .pw-btn:hover { background: #2a4a7a; }
   .pw-error { color: #fca5a5; font-size: 0.85rem; }
+
+  /* ── Edit mode banner ── */
+  .edit-banner {
+    display: none;
+    background: #1a2e50;
+    border: 1px solid #2a4a7a;
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    font-size: 0.82rem;
+    color: #60a5fa;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
 </style>
 </head>
 <body>
@@ -273,6 +325,7 @@
 
     <!-- Hotels -->
     <div class="panel active" id="panel-hotels">
+      <div class="edit-banner" id="banner-hotel">Editing existing hotel — Save to update</div>
       <div class="field"><label>Hotel / Place name</label><input type="text" id="h-name" placeholder="e.g. Novotel Queenstown"></div>
       <div class="field"><label>City</label><input type="text" id="h-city" placeholder="e.g. Queenstown"></div>
       <div class="row">
@@ -293,13 +346,15 @@
       </div>
       <div class="field"><label>Confirmation # (optional)</label><input type="text" id="h-ref" placeholder="e.g. QT8821"></div>
       <div class="field"><label>Notes (optional)</label><input type="text" id="h-notes" placeholder="Any extra info"></div>
-      <button class="btn-save" onclick="saveHotel()">Save Hotel</button>
+      <button class="btn-save" id="btn-save-hotel" onclick="saveHotel()">Save Hotel</button>
+      <div class="cancel-edit" id="cancel-hotel" onclick="cancelEdit('hotel')">✕ Cancel edit</div>
 
       <div class="existing" id="hotels-list"></div>
     </div>
 
     <!-- Flights -->
     <div class="panel" id="panel-flights">
+      <div class="edit-banner" id="banner-flight">Editing existing flight — Save to update</div>
       <div class="row">
         <div class="field"><label>From</label><input type="text" id="f-from" placeholder="e.g. CHC"></div>
         <div class="field"><label>To</label><input type="text" id="f-to" placeholder="e.g. AKL"></div>
@@ -312,30 +367,35 @@
       <div class="field"><label>Airline & flight #</label><input type="text" id="f-airline" placeholder="e.g. Air New Zealand NZ523"></div>
       <div class="field"><label>Booking ref (optional)</label><input type="text" id="f-ref" placeholder="e.g. ABC123"></div>
       <div class="field"><label>Sleep that night</label><input type="text" id="f-sleep" placeholder="e.g. Auckland (or leave blank if overnight)"></div>
-      <button class="btn-save" onclick="saveFlight()">Save Flight</button>
+      <button class="btn-save" id="btn-save-flight" onclick="saveFlight()">Save Flight</button>
+      <div class="cancel-edit" id="cancel-flight" onclick="cancelEdit('flight')">✕ Cancel edit</div>
 
       <div class="existing" id="flights-list"></div>
     </div>
 
     <!-- Activities -->
     <div class="panel" id="panel-activities">
+      <div class="edit-banner" id="banner-activity">Editing existing activity — Save to update</div>
       <div class="field"><label>Activity</label><input type="text" id="a-name" placeholder="e.g. Hobbiton Tour"></div>
       <div class="field"><label>Date</label><input type="date" id="a-date"></div>
       <div class="field"><label>Time (optional)</label><input type="time" id="a-time"></div>
       <div class="field"><label>Notes (optional)</label><input type="text" id="a-notes" placeholder="e.g. Pre-booked, ref XYZ"></div>
-      <button class="btn-save" onclick="saveActivity()">Save Activity</button>
+      <button class="btn-save" id="btn-save-activity" onclick="saveActivity()">Save Activity</button>
+      <div class="cancel-edit" id="cancel-activity" onclick="cancelEdit('activity')">✕ Cancel edit</div>
 
       <div class="existing" id="activities-list"></div>
     </div>
 
     <!-- Todos -->
     <div class="panel" id="panel-todos">
+      <div class="edit-banner" id="banner-todo">Editing existing task — Save to update</div>
       <div class="field"><label>Task (English)</label><input type="text" id="t-label" placeholder="e.g. Book campervan"></div>
       <div class="field"><label>Task (עברית — optional)</label><input type="text" id="t-label-he" placeholder="e.g. להזמין קמפרוון"></div>
       <div class="field"><label>Notes (optional)</label><input type="text" id="t-notes" placeholder="Any extra detail"></div>
-      <button class="btn-save" onclick="saveTodo()">Add Task</button>
+      <button class="btn-save" id="btn-save-todo" onclick="saveTodo()">Add Task</button>
+      <div class="cancel-edit" id="cancel-todo" onclick="cancelEdit('todo')">✕ Cancel edit</div>
       <hr class="divider">
-      <p style="font-size:0.85rem;color:#5a7aaa;margin-bottom:1rem;">Tap any item to mark it done.</p>
+      <p style="font-size:0.82rem;color:#5a7aaa;margin-bottom:1rem;">Tap the checkbox to mark done · Edit or delete with the buttons.</p>
       <div id="todos-list"></div>
     </div>
 
@@ -347,12 +407,16 @@
 <script>
   let pw = '';
   let tripData = null;
+  let editingHotelIndex    = -1;
+  let editingFlightIndex   = -1;
+  let editingActivityIndex = -1;
+  let editingTodoId        = null;
 
+  // ── Unlock ─────────────────────────────────────────
   function unlock() {
     const input = document.getElementById('pw-input').value.trim();
     if (!input) return;
     pw = input;
-    // Try fetching data to verify password works
     fetch('/trip-data.json')
       .then(r => r.json())
       .then(data => {
@@ -382,33 +446,31 @@
     setTimeout(() => t.className = '', 3000);
   }
 
-  // ── API call ───────────────────────────────────────
-  async function save(action, data) {
-    const btns = document.querySelectorAll('.btn-save');
-    btns.forEach(b => { b.disabled = true; b.textContent = 'Saving…'; });
-
-    try {
-      const res = await fetch('/api/save', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: pw, action, data }),
-      });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error || 'Save failed');
-
-      // Refresh local data
-      const r2 = await fetch('/trip-data.json?t=' + Date.now());
-      tripData = await r2.json();
-      renderExisting();
-      showToast('✓ Saved! Dashboard updating…', false);
-    } catch(e) {
-      showToast('✗ ' + e.message, true);
-    } finally {
-      btns.forEach(b => { b.disabled = false; b.textContent = b.textContent.replace('Saving…', 'Save'); });
-    }
+  // ── Generic API call ───────────────────────────────
+  async function apiSave(action, data) {
+    const res = await fetch('/api/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: pw, action, data }),
+    });
+    const json = await res.json();
+    if (!res.ok) throw new Error(json.error || 'Save failed');
+    const r2 = await fetch('/trip-data.json?t=' + Date.now());
+    tripData = await r2.json();
+    renderExisting();
+    showToast('✓ Saved! Dashboard updating…', false);
   }
 
-  // ── Hotels ─────────────────────────────────────────
+  // ── Shared button helper ───────────────────────────
+  function setBtn(id, text, disabled) {
+    const b = document.getElementById(id);
+    b.textContent = text;
+    b.disabled = disabled;
+  }
+
+  // ═══════════════════════════════════════════════════
+  //  HOTELS
+  // ═══════════════════════════════════════════════════
   async function saveHotel() {
     const checkIn  = document.getElementById('h-checkin').value;
     const checkOut = document.getElementById('h-checkout').value;
@@ -417,18 +479,56 @@
     if (!name || !city || !checkIn || !checkOut) { showToast('Fill in name, city and dates', true); return; }
 
     const nights = Math.round((new Date(checkOut) - new Date(checkIn)) / 86400000);
-    await save('addHotel', {
+    const hotelData = {
       name, city, checkIn, checkOut, nights,
       bookedVia:    document.getElementById('h-via').value,
       confirmation: document.getElementById('h-ref').value.trim(),
       notes:        document.getElementById('h-notes').value.trim(),
-    });
+    };
 
-    ['h-name','h-city','h-checkin','h-checkout','h-ref','h-notes'].forEach(id => document.getElementById(id).value = '');
+    setBtn('btn-save-hotel', 'Saving…', true);
+    try {
+      if (editingHotelIndex >= 0) {
+        await apiSave('editHotel', { index: editingHotelIndex, ...hotelData });
+        editingHotelIndex = -1;
+      } else {
+        await apiSave('addHotel', hotelData);
+      }
+      clearForm(['h-name','h-city','h-checkin','h-checkout','h-ref','h-notes']);
+      showBanner('hotel', false);
+    } catch(e) {
+      showToast('✗ ' + e.message, true);
+    } finally {
+      setBtn('btn-save-hotel', 'Save Hotel', false);
+    }
   }
 
-  // ── Flights ────────────────────────────────────────
-  async function saveFlight() {
+  function editHotelItem(index) {
+    const h = tripData.HOTELS[index];
+    document.getElementById('h-name').value    = h.name;
+    document.getElementById('h-city').value    = h.city;
+    document.getElementById('h-checkin').value = h.checkIn;
+    document.getElementById('h-checkout').value= h.checkOut;
+    document.getElementById('h-via').value     = h.bookedVia;
+    document.getElementById('h-ref').value     = h.confirmation || '';
+    document.getElementById('h-notes').value   = h.notes || '';
+    editingHotelIndex = index;
+    setBtn('btn-save-hotel', 'Update Hotel', false);
+    showBanner('hotel', true);
+    showTab('hotels');
+    document.getElementById('panel-hotels').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  async function deleteHotel(index) {
+    if (!confirm('Remove this hotel?')) return;
+    try { await apiSave('deleteHotel', { index }); }
+    catch(e) { showToast('✗ ' + e.message, true); }
+  }
+
+  // ═══════════════════════════════════════════════════
+  //  FLIGHTS
+  // ═══════════════════════════════════════════════════
+  function buildFlightData() {
     const from    = document.getElementById('f-from').value.trim().toUpperCase();
     const to      = document.getElementById('f-to').value.trim().toUpperCase();
     const date    = document.getElementById('f-date').value;
@@ -437,119 +537,274 @@
     const airline = document.getElementById('f-airline').value.trim();
     const ref     = document.getElementById('f-ref').value.trim();
     const sleep   = document.getElementById('f-sleep').value.trim() || null;
-
-    if (!from || !to || !date || !airline) { showToast('Fill in route, date and airline', true); return; }
-
     const sub = [departs ? `Departs ${departs}` : '', arrives ? `Arr ${arrives}` : '', airline, ref].filter(Boolean).join(' · ');
-    await save('addFlight', {
-      date,
-      label: `✈️ ${from} → ${to}`,
-      sub,
-      sleep,
-    });
-
-    ['f-from','f-to','f-date','f-departs','f-arrives','f-airline','f-ref','f-sleep'].forEach(id => document.getElementById(id).value = '');
+    return { from, to, date, airline, sleep, data: { date, label: `✈️ ${from} → ${to}`, sub, sleep } };
   }
 
-  // ── Activities ─────────────────────────────────────
+  async function saveFlight() {
+    const { from, to, date, airline, data } = buildFlightData();
+    if (!from || !to || !date || !airline) { showToast('Fill in route, date and airline', true); return; }
+
+    setBtn('btn-save-flight', 'Saving…', true);
+    try {
+      if (editingFlightIndex >= 0) {
+        await apiSave('editFlight', { index: editingFlightIndex, ...data });
+        editingFlightIndex = -1;
+      } else {
+        await apiSave('addFlight', data);
+      }
+      clearForm(['f-from','f-to','f-date','f-departs','f-arrives','f-airline','f-ref','f-sleep']);
+      showBanner('flight', false);
+    } catch(e) {
+      showToast('✗ ' + e.message, true);
+    } finally {
+      setBtn('btn-save-flight', 'Save Flight', false);
+    }
+  }
+
+  function editFlightItem(index) {
+    const f = tripData.FLIGHTS[index];
+    // Parse label back to from/to: "✈️ CHC → AKL"
+    const match = f.label.replace('✈️ ', '').split(' → ');
+    document.getElementById('f-from').value = match[0] || '';
+    document.getElementById('f-to').value   = match[1] || '';
+    document.getElementById('f-date').value = f.date;
+    // Parse sub: "Departs 10:30 · Arr 11:45 · Air NZ NZ523 · ABC456"
+    const parts = (f.sub || '').split(' · ');
+    const dep = parts.find(p => p.startsWith('Departs'));
+    const arr = parts.find(p => p.startsWith('Arr '));
+    document.getElementById('f-departs').value = dep ? dep.replace('Departs ', '') : '';
+    document.getElementById('f-arrives').value = arr ? arr.replace('Arr ', '') : '';
+    // Airline is the part that's not dep/arr/short-ref (heuristic: not "Departs", not "Arr", longer than 5 chars or looks like airline)
+    const rest = parts.filter(p => !p.startsWith('Departs') && !p.startsWith('Arr '));
+    document.getElementById('f-airline').value = rest[0] || '';
+    document.getElementById('f-ref').value     = rest[1] || '';
+    document.getElementById('f-sleep').value   = f.sleep || '';
+    editingFlightIndex = index;
+    setBtn('btn-save-flight', 'Update Flight', false);
+    showBanner('flight', true);
+    showTab('flights');
+    document.getElementById('panel-flights').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  async function deleteFlight(index) {
+    if (!confirm('Remove this flight?')) return;
+    try { await apiSave('deleteFlight', { index }); }
+    catch(e) { showToast('✗ ' + e.message, true); }
+  }
+
+  // ═══════════════════════════════════════════════════
+  //  ACTIVITIES
+  // ═══════════════════════════════════════════════════
   async function saveActivity() {
     const label = document.getElementById('a-name').value.trim();
     const date  = document.getElementById('a-date').value;
     if (!label || !date) { showToast('Fill in activity name and date', true); return; }
 
-    await save('addActivity', {
-      date,
-      label,
+    const actData = {
+      date, label,
       time:  document.getElementById('a-time').value || null,
       notes: document.getElementById('a-notes').value.trim(),
-    });
+    };
 
-    ['a-name','a-date','a-time','a-notes'].forEach(id => document.getElementById(id).value = '');
+    setBtn('btn-save-activity', 'Saving…', true);
+    try {
+      if (editingActivityIndex >= 0) {
+        await apiSave('editActivity', { index: editingActivityIndex, ...actData });
+        editingActivityIndex = -1;
+      } else {
+        await apiSave('addActivity', actData);
+      }
+      clearForm(['a-name','a-date','a-time','a-notes']);
+      showBanner('activity', false);
+    } catch(e) {
+      showToast('✗ ' + e.message, true);
+    } finally {
+      setBtn('btn-save-activity', 'Save Activity', false);
+    }
   }
 
-  // ── Todos ──────────────────────────────────────────
+  function editActivityItem(index) {
+    const a = tripData.ACTIVITIES[index];
+    document.getElementById('a-name').value  = a.label;
+    document.getElementById('a-date').value  = a.date;
+    document.getElementById('a-time').value  = a.time || '';
+    document.getElementById('a-notes').value = a.notes || '';
+    editingActivityIndex = index;
+    setBtn('btn-save-activity', 'Update Activity', false);
+    showBanner('activity', true);
+    showTab('activities');
+    document.getElementById('panel-activities').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  async function deleteActivity(index) {
+    if (!confirm('Remove this activity?')) return;
+    try { await apiSave('deleteActivity', { index }); }
+    catch(e) { showToast('✗ ' + e.message, true); }
+  }
+
+  // ═══════════════════════════════════════════════════
+  //  TODOS
+  // ═══════════════════════════════════════════════════
   async function saveTodo() {
     const label = document.getElementById('t-label').value.trim();
     if (!label) { showToast('Enter a task name', true); return; }
-    const id = 'todo-' + Date.now();
-    await save('addTodo', {
-      id,
-      label,
-      labelHe: document.getElementById('t-label-he').value.trim() || label,
-      notes:   document.getElementById('t-notes').value.trim(),
-      notesHe: document.getElementById('t-notes').value.trim(),
-      done: false,
-    });
-    ['t-label','t-label-he','t-notes'].forEach(id => document.getElementById(id).value = '');
+
+    const labelHe = document.getElementById('t-label-he').value.trim() || label;
+    const notes   = document.getElementById('t-notes').value.trim();
+
+    setBtn('btn-save-todo', 'Saving…', true);
+    try {
+      if (editingTodoId) {
+        await apiSave('editTodo', { id: editingTodoId, label, labelHe, notes, notesHe: notes });
+        editingTodoId = null;
+      } else {
+        await apiSave('addTodo', {
+          id: 'todo-' + Date.now(),
+          label, labelHe, notes, notesHe: notes, done: false,
+        });
+      }
+      clearForm(['t-label','t-label-he','t-notes']);
+      showBanner('todo', false);
+    } catch(e) {
+      showToast('✗ ' + e.message, true);
+    } finally {
+      setBtn('btn-save-todo', editingTodoId ? 'Update Task' : 'Add Task', false);
+      if (!editingTodoId) setBtn('btn-save-todo', 'Add Task', false);
+    }
   }
 
   async function toggleTodo(id, currentDone) {
-    await save('toggleTodo', { id, done: !currentDone });
+    try { await apiSave('toggleTodo', { id, done: !currentDone }); }
+    catch(e) { showToast('✗ ' + e.message, true); }
   }
 
-  // ── Render existing items ──────────────────────────
+  function editTodoItem(id) {
+    const t = tripData.TODOS.find(t => t.id === id);
+    if (!t) return;
+    document.getElementById('t-label').value    = t.label;
+    document.getElementById('t-label-he').value = t.labelHe || '';
+    document.getElementById('t-notes').value    = t.notes || '';
+    editingTodoId = id;
+    setBtn('btn-save-todo', 'Update Task', false);
+    showBanner('todo', true);
+    showTab('todos');
+    document.getElementById('panel-todos').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  async function deleteTodo(id) {
+    if (!confirm('Delete this task?')) return;
+    try { await apiSave('deleteTodo', { id }); }
+    catch(e) { showToast('✗ ' + e.message, true); }
+  }
+
+  // ═══════════════════════════════════════════════════
+  //  CANCEL EDIT
+  // ═══════════════════════════════════════════════════
+  function cancelEdit(tab) {
+    if (tab === 'hotel') {
+      editingHotelIndex = -1;
+      clearForm(['h-name','h-city','h-checkin','h-checkout','h-ref','h-notes']);
+      setBtn('btn-save-hotel', 'Save Hotel', false);
+    } else if (tab === 'flight') {
+      editingFlightIndex = -1;
+      clearForm(['f-from','f-to','f-date','f-departs','f-arrives','f-airline','f-ref','f-sleep']);
+      setBtn('btn-save-flight', 'Save Flight', false);
+    } else if (tab === 'activity') {
+      editingActivityIndex = -1;
+      clearForm(['a-name','a-date','a-time','a-notes']);
+      setBtn('btn-save-activity', 'Save Activity', false);
+    } else if (tab === 'todo') {
+      editingTodoId = null;
+      clearForm(['t-label','t-label-he','t-notes']);
+      setBtn('btn-save-todo', 'Add Task', false);
+    }
+    showBanner(tab, false);
+  }
+
+  // ═══════════════════════════════════════════════════
+  //  HELPERS
+  // ═══════════════════════════════════════════════════
+  function clearForm(ids) {
+    ids.forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  }
+
+  function showBanner(tab, visible) {
+    const el = document.getElementById('cancel-' + tab);
+    const banner = document.getElementById('banner-' + tab);
+    if (el) el.style.display = visible ? 'block' : 'none';
+    if (banner) banner.style.display = visible ? 'block' : 'none';
+  }
+
+  // ═══════════════════════════════════════════════════
+  //  RENDER
+  // ═══════════════════════════════════════════════════
   function renderExisting() {
     if (!tripData) return;
 
     // Hotels
     const hotelEl = document.getElementById('hotels-list');
-    if (tripData.HOTELS.length) {
-      hotelEl.innerHTML = '<h3>Current hotels</h3>' + tripData.HOTELS.map((h, i) => `
+    hotelEl.innerHTML = tripData.HOTELS.length
+      ? '<h3>Current hotels</h3>' + tripData.HOTELS.map((h, i) => `
         <div class="item-row">
-          <div>
+          <div style="flex:1;min-width:0">
             <div class="item-label">🏨 ${h.name} — ${h.city}</div>
-            <div class="item-sub">${h.checkIn} → ${h.checkOut} · ${h.bookedVia}${h.confirmation ? ' · ' + h.confirmation : ''}</div>
+            <div class="item-sub">${h.checkIn} → ${h.checkOut} · ${h.nights}n · ${h.bookedVia}${h.confirmation ? ' · ' + h.confirmation : ''}${h.notes ? ' · ' + h.notes : ''}</div>
           </div>
-          <button class="btn-delete" onclick="deleteHotel(${i})">Remove</button>
-        </div>`).join('');
-    } else {
-      hotelEl.innerHTML = '';
-    }
+          <div class="item-actions">
+            <button class="btn-edit" onclick="editHotelItem(${i})">Edit</button>
+            <button class="btn-delete" onclick="deleteHotel(${i})">✕</button>
+          </div>
+        </div>`).join('')
+      : '';
 
     // Flights
     const flightEl = document.getElementById('flights-list');
-    flightEl.innerHTML = '<h3 style="margin-top:1.5rem;font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#3d5a80;margin-bottom:0.75rem">Current flights</h3>' +
-      tripData.FLIGHTS.map(f => `
+    flightEl.innerHTML = tripData.FLIGHTS.length
+      ? '<h3 style="margin-top:1.5rem;font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#3d5a80;margin-bottom:0.75rem">Current flights</h3>' +
+        tripData.FLIGHTS.map((f, i) => `
         <div class="item-row">
-          <div>
+          <div style="flex:1;min-width:0">
             <div class="item-label">${f.label}</div>
             <div class="item-sub">${f.date} · ${f.sub}</div>
           </div>
-        </div>`).join('');
+          <div class="item-actions">
+            <button class="btn-edit" onclick="editFlightItem(${i})">Edit</button>
+            <button class="btn-delete" onclick="deleteFlight(${i})">✕</button>
+          </div>
+        </div>`).join('')
+      : '<h3 style="margin-top:1.5rem;font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#3d5a80;margin-bottom:0.75rem">Current flights</h3><p style="font-size:0.85rem;color:#3d5a80">No flights yet.</p>';
 
     // Activities
     const actEl = document.getElementById('activities-list');
-    if (tripData.ACTIVITIES.length) {
-      actEl.innerHTML = '<h3 style="margin-top:1.5rem;font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#3d5a80;margin-bottom:0.75rem">Scheduled activities</h3>' +
+    actEl.innerHTML = tripData.ACTIVITIES.length
+      ? '<h3 style="margin-top:1.5rem;font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#3d5a80;margin-bottom:0.75rem">Scheduled activities</h3>' +
         tripData.ACTIVITIES.map((a, i) => `
-          <div class="item-row">
-            <div>
-              <div class="item-label">⭐ ${a.label}</div>
-              <div class="item-sub">${a.date}${a.time ? ' · ' + a.time : ''}${a.notes ? ' · ' + a.notes : ''}</div>
-            </div>
-            <button class="btn-delete" onclick="deleteActivity(${i})">Remove</button>
-          </div>`).join('');
-    } else {
-      actEl.innerHTML = '';
-    }
+        <div class="item-row">
+          <div style="flex:1;min-width:0">
+            <div class="item-label">⭐ ${a.label}</div>
+            <div class="item-sub">${a.date}${a.time ? ' · ' + a.time : ''}${a.notes ? ' · ' + a.notes : ''}</div>
+          </div>
+          <div class="item-actions">
+            <button class="btn-edit" onclick="editActivityItem(${i})">Edit</button>
+            <button class="btn-delete" onclick="deleteActivity(${i})">✕</button>
+          </div>
+        </div>`).join('')
+      : '';
 
     // Todos
     const todoEl = document.getElementById('todos-list');
     todoEl.innerHTML = tripData.TODOS.map(t => `
-      <div class="todo-check-row ${t.done ? 'done' : ''}" onclick="toggleTodo('${t.id}', ${t.done})">
-        <div class="todo-box">${t.done ? '✓' : ''}</div>
-        <div class="todo-name">${t.label}</div>
+      <div class="todo-check-row ${t.done ? 'done' : ''}">
+        <div class="todo-toggle" onclick="toggleTodo('${t.id}', ${t.done})">
+          <div class="todo-box">${t.done ? '✓' : ''}</div>
+          <div class="todo-name">${t.label}</div>
+        </div>
+        <div class="item-actions">
+          <button class="btn-edit" onclick="editTodoItem('${t.id}')">Edit</button>
+          <button class="btn-delete" onclick="deleteTodo('${t.id}')">✕</button>
+        </div>
       </div>`).join('');
-  }
-
-  async function deleteHotel(index) {
-    if (!confirm('Remove this hotel?')) return;
-    await save('deleteHotel', { index });
-  }
-
-  async function deleteActivity(index) {
-    if (!confirm('Remove this activity?')) return;
-    await save('deleteActivity', { index });
   }
 </script>
 
