@@ -1290,11 +1290,31 @@
     applyTheme();
   }
 
-  renderTodos();
-  renderHotels();
-  buildCalendar();
-  applyTheme();
-  applyLang();
+  function renderAll() {
+    renderTodos();
+    renderHotels();
+    document.getElementById('calendar-root').innerHTML = '';
+    buildCalendar();
+    applyTheme();
+    applyLang();
+  }
+
+  // Try to load live data from trip-data.json (served via Vercel)
+  // Falls back to inline data above if not available (local preview)
+  fetch('/trip-data.json?t=' + Date.now())
+    .then(r => r.ok ? r.json() : null)
+    .then(data => {
+      if (data) {
+        FLIGHTS.length = 0;    FLIGHTS.push(...data.FLIGHTS);
+        ACTIVITIES.length = 0; ACTIVITIES.push(...data.ACTIVITIES);
+        HOTELS.length = 0;     HOTELS.push(...data.HOTELS);
+        TODOS.length = 0;      TODOS.push(...data.TODOS);
+        Object.keys(KNOWN_STAYS).forEach(k => delete KNOWN_STAYS[k]);
+        Object.assign(KNOWN_STAYS, data.KNOWN_STAYS);
+      }
+    })
+    .catch(() => {})
+    .finally(() => renderAll());
 
   // Last updated
   document.getElementById('last-updated').textContent =
