@@ -632,6 +632,109 @@
     border-top: 1px solid #1e2a45;
     margin-top: 1rem;
   }
+
+  /* ── Controls bar ── */
+  .controls {
+    display: flex;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-top: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .ctrl-btn {
+    background: #1a2540;
+    border: 1px solid #263a5e;
+    border-radius: 8px;
+    color: #7891b5;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 0.4rem 0.9rem;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    letter-spacing: 0.03em;
+  }
+
+  .ctrl-btn:hover  { background: #1e2d50; color: #c8d8f0; }
+  .ctrl-btn.active { background: #1e3a60; border-color: #3a6aaa; color: #60a5fa; }
+
+  /* ── Light mode ── */
+  body.light {
+    background: #f0f5ff;
+    color: #1a2a40;
+  }
+
+  body.light header {
+    background: linear-gradient(135deg, #dce8ff 0%, #f0f5ff 100%);
+    border-bottom-color: #c0d4ea;
+  }
+
+  body.light header h1          { color: #1a2a40; }
+  body.light header .subtitle   { color: #5a7aaa; }
+  body.light .ctrl-btn          { background: #e0eaf8; border-color: #c0d4ea; color: #5a7aaa; }
+  body.light .ctrl-btn:hover    { background: #ccdaf0; color: #2d4a70; }
+  body.light .ctrl-btn.active   { background: #c8dcf5; border-color: #4a80cc; color: #2563eb; }
+  body.light .countdown-unit    { background: #e0eaf8; border-color: #b8ceea; }
+  body.light .countdown-unit .num   { color: #2563eb; }
+  body.light .countdown-unit .label { color: #7891b5; }
+
+  body.light .card              { background: #ffffff; border-color: #d0dff0; }
+  body.light .card h2           { color: #1a2a40; }
+  body.light .section-title     { color: #7891b5; }
+
+  body.light .route-line        { background: #d0dff0; }
+  body.light .route-node .name  { color: #3d5a80; }
+  body.light .route-node .week  { color: #8aa0bc; }
+  body.light .route-node .dot.tbd { background: #ffffff; }
+
+  body.light .hotel-toggle      { background: #ffffff; border-color: #d0dff0; color: #1a2a40; }
+  body.light .hotel-toggle:hover { background: #f0f5ff; }
+  body.light .hotel-toggle.is-open { border-bottom-color: transparent; }
+  body.light .hotel-body        { background: #ffffff; border-color: #d0dff0; }
+  body.light .hotel-card        { background: #f0f6ff; border-color: #b8ccee; }
+  body.light .hotel-name        { color: #2563eb; }
+  body.light .hotel-city        { color: #5a7aaa; }
+  body.light .hotel-meta-label  { color: #8aa0bc; }
+  body.light .hotel-meta-value  { color: #3d5a80; }
+  body.light .hotel-confirmation { background: #e0eaf8; color: #2563eb; }
+  body.light .hotel-booked-via  { background: #e8f0fa; border-color: #c0d4ea; color: #5a7aaa; }
+  body.light .hotel-empty       { color: #8aa0bc; }
+
+  body.light .todo-item         { background: #f4f8ff; border-color: #d0dff0; }
+  body.light .todo-item:hover   { background: #ebf2ff; }
+  body.light .todo-item.done    { border-color: #e0eaf8; }
+  body.light .todo-label        { color: #1a2a40; }
+  body.light .todo-notes        { color: #7891b5; }
+  body.light .todo-check        { border-color: #b8ceea; }
+
+  body.light .cal-month         { background: #ffffff; border-color: #d0dff0; }
+  body.light .cal-month-header  { color: #1a2a40; border-bottom-color: #d0dff0; }
+  body.light .cal-dow           { color: #8aa0bc; border-bottom-color: #e4eef8; }
+  body.light .cal-cell          { border-color: #e4eef8; }
+  body.light .cal-cell.open     { background: #f8fbff; }
+  body.light .cal-cell.empty    { background: #eef4fc; border-color: #dce8f5; }
+  body.light .cal-cell.hotel    { background: #e8f2ff; border-color: #b8ccee; }
+  body.light .cal-day-num       { color: #b8ceea; }
+  body.light .cal-cell.flight .cal-day-num { color: #4a7c59; }
+  body.light .cal-cell.hotel  .cal-day-num { color: #5a7aaa; }
+  body.light .cal-sleep         { color: #b8ceea; }
+  body.light .cal-hotel-badge   { background: #dceeff; border-color: #b8ccee; }
+  body.light .cal-hotel-badge-name { color: #2563eb; }
+  body.light .cal-hotel-badge-sub  { color: #7a9acd; }
+
+  body.light footer { color: #b8ceea; border-top-color: #d0dff0; }
+
+  /* ── RTL (Hebrew) ── */
+  [dir="rtl"] .route-strip    { flex-direction: row-reverse; }
+  [dir="rtl"] .countdown-bar  { flex-direction: row-reverse; }
+  [dir="rtl"] .hotel-card-top { flex-direction: row-reverse; }
+  [dir="rtl"] .hotel-card-meta { direction: rtl; }
+  [dir="rtl"] .todo-item      { flex-direction: row-reverse; }
+  [dir="rtl"] .hotel-toggle   { flex-direction: row-reverse; }
+  [dir="rtl"] .controls       { flex-direction: row-reverse; }
+  [dir="rtl"] header          { direction: rtl; }
+  [dir="rtl"] main            { direction: rtl; }
+  [dir="rtl"] footer          { direction: rtl; }
 </style>
 </head>
 <body>
@@ -642,9 +745,14 @@
   <div class="subtitle">Lior · Sivan · Aviv (10) · Yarden (7) · Gili (4) &nbsp;|&nbsp; ~3 months &nbsp;|&nbsp; Far East + New Zealand</div>
 
   <div class="countdown-bar" id="countdown">
-    <div class="countdown-unit"><div class="num" id="cd-months">—</div><div class="label">Months</div></div>
-    <div class="countdown-unit"><div class="num" id="cd-weeks">—</div><div class="label">Weeks</div></div>
-    <div class="countdown-unit"><div class="num" id="cd-days">—</div><div class="label">Days</div></div>
+    <div class="countdown-unit"><div class="num" id="cd-months">—</div><div class="label" data-i18n="months">Months</div></div>
+    <div class="countdown-unit"><div class="num" id="cd-weeks">—</div><div class="label" data-i18n="weeks">Weeks</div></div>
+    <div class="countdown-unit"><div class="num" id="cd-days">—</div><div class="label" data-i18n="days">Days</div></div>
+  </div>
+
+  <div class="controls">
+    <button class="ctrl-btn" id="btn-lang" onclick="toggleLang()">🌐 עברית</button>
+    <button class="ctrl-btn" id="btn-theme" onclick="toggleTheme()">☀️ Light</button>
   </div>
 </header>
 
@@ -813,12 +921,12 @@
   const ACTIVITIES = [];
 
   const TODOS = [
-    { id: 'passports',    label: 'New passports',                notes: 'All 5 family members',                    done: false },
-    { id: 'visas-au',     label: 'Australia visas (ETA)',         notes: 'Apply online at immi.homeaffairs.gov.au', done: false },
-    { id: 'visas-nz',     label: 'New Zealand visas (NZeTA)',     notes: 'Apply via the NZeTA app',                 done: false },
-    { id: 'insurance',    label: 'Travel insurance',              notes: '3-month multi-country, family of 5',      done: false },
-    { id: 'intl-license', label: 'International driving licence', notes: 'Apply at post office (Lior + Sivan)',     done: false },
-    { id: 'vaccinations', label: 'Vaccinations',                  notes: 'Check requirements per country',          done: false },
+    { id: 'passports',    label: 'New passports',                labelHe: 'דרכונים חדשים',          notes: 'All 5 family members',                    notesHe: 'כל 5 בני המשפחה',                    done: false },
+    { id: 'visas-au',     label: 'Australia visas (ETA)',         labelHe: 'ויזות לאוסטרליה (ETA)',  notes: 'Apply online at immi.homeaffairs.gov.au', notesHe: 'הגשה אונליין ב-immi.homeaffairs.gov.au', done: false },
+    { id: 'visas-nz',     label: 'New Zealand visas (NZeTA)',     labelHe: 'ויזות לניו זילנד (NZeTA)', notes: 'Apply via the NZeTA app',               notesHe: 'הגשה דרך אפליקציית NZeTA',           done: false },
+    { id: 'insurance',    label: 'Travel insurance',              labelHe: 'ביטוח נסיעות',           notes: '3-month multi-country, family of 5',      notesHe: '3 חודשים, מדינות מרובות, משפחה של 5', done: false },
+    { id: 'intl-license', label: 'International driving licence', labelHe: 'רישיון נהיגה בינלאומי',  notes: 'Apply at post office (Lior + Sivan)',     notesHe: 'הגשה בסניף דואר (ליאור + סיון)',     done: false },
+    { id: 'vaccinations', label: 'Vaccinations',                  labelHe: 'חיסונים',                notes: 'Check requirements per country',          notesHe: 'לבדוק דרישות לכל מדינה',             done: false },
   ];
 </script>
 <script>
@@ -868,7 +976,7 @@
       HOTELS.length ? `— ${HOTELS.length} confirmed` : '— 0 confirmed';
 
     if (!HOTELS.length) {
-      root.innerHTML = `<div class="hotel-empty">No hotels booked yet — they'll appear here as you confirm them.</div>`;
+      root.innerHTML = `<div class="hotel-empty">${T[lang].hotelsNone}</div>`;
       return;
     }
 
@@ -963,7 +1071,7 @@
 
       const grid = document.createElement('div');
       grid.className = 'cal-grid';
-      ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].forEach(d => {
+      T[lang].calDow.forEach(d => {
         grid.innerHTML += `<div class="cal-dow">${d}</div>`;
       });
 
@@ -1040,15 +1148,18 @@
   function renderTodos() {
     const root  = document.getElementById('todo-list');
     const state = JSON.parse(localStorage.getItem('todo-state') || '{}');
+    const he    = lang === 'he';
 
     root.innerHTML = TODOS.map(t => {
-      const done = state[t.id] ?? t.done;
+      const done  = state[t.id] ?? t.done;
+      const label = he && t.labelHe ? t.labelHe : t.label;
+      const notes = he && t.notesHe ? t.notesHe : t.notes;
       return `
         <div class="todo-item ${done ? 'done' : ''}" onclick="toggleTodo('${t.id}')">
           <div class="todo-check">${done ? '✓' : ''}</div>
           <div class="todo-text">
-            <div class="todo-label">${t.label}</div>
-            ${t.notes ? `<div class="todo-notes">${t.notes}</div>` : ''}
+            <div class="todo-label">${label}</div>
+            ${notes ? `<div class="todo-notes">${notes}</div>` : ''}
           </div>
         </div>`;
     }).join('');
@@ -1062,9 +1173,121 @@
     renderTodos();
   }
 
+  // ── Translations ─────────────────────────────────────
+  const T = {
+    en: {
+      months: 'Months', weeks: 'Weeks', days: 'Days',
+      routeTitle: 'Route at a glance',
+      flightsTitle: 'Confirmed flights',
+      todoTitle: 'To Do',
+      accommodationTitle: 'Accommodation',
+      hotelsBtn: 'Hotels & Accommodation',
+      hotelsNone: "No hotels booked yet — they'll appear here as you confirm them.",
+      scheduleTitle: 'Schedule',
+      southIsland: 'South Island', northIsland: 'North Island', home: 'Home',
+      calDow: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+      langToggle: '🌐 עברית', themeToggleDark: '☀️ Light', themeToggleLight: '🌙 Dark',
+    },
+    he: {
+      months: 'חודשים', weeks: 'שבועות', days: 'ימים',
+      routeTitle: 'המסלול',
+      flightsTitle: 'טיסות מאושרות',
+      todoTitle: 'לעשות',
+      accommodationTitle: 'לינה',
+      hotelsBtn: 'מלונות ולינה',
+      hotelsNone: 'עוד אין מלונות מאושרים — יופיעו כאן כשיאושרו.',
+      scheduleTitle: 'לוח זמנים',
+      southIsland: 'האי הדרומי', northIsland: 'האי הצפוני', home: 'הבית',
+      calDow: ['ב׳','ג׳','ד׳','ה׳','ו׳','ש׳','א׳'],
+      langToggle: '🌐 English', themeToggleDark: '☀️ בהיר', themeToggleLight: '🌙 כהה',
+    },
+  };
+
+  let lang  = localStorage.getItem('lang')  || 'en';
+  let theme = localStorage.getItem('theme') || 'dark';
+
+  function applyLang() {
+    const t = T[lang];
+    document.documentElement.lang = lang;
+    document.documentElement.dir  = lang === 'he' ? 'rtl' : 'ltr';
+
+    // static data-i18n elements
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.dataset.i18n;
+      if (t[key]) el.textContent = t[key];
+    });
+
+    // section titles
+    document.querySelectorAll('.section-title').forEach(el => {
+      const map = {
+        'Route at a glance': 'routeTitle', 'המסלול': 'routeTitle',
+        'Confirmed flights':  'flightsTitle', 'טיסות מאושרות': 'flightsTitle',
+        'To Do':              'todoTitle',  'לעשות': 'todoTitle',
+        'Accommodation':      'accommodationTitle', 'לינה': 'accommodationTitle',
+        'Schedule':           'scheduleTitle', 'לוח זמנים': 'scheduleTitle',
+      };
+      const key = map[el.textContent.trim()];
+      if (key) el.textContent = t[key];
+    });
+
+    // route node names
+    document.querySelectorAll('.route-node .name').forEach(el => {
+      const map = {
+        'South Island': 'southIsland', 'האי הדרומי': 'southIsland',
+        'North Island': 'northIsland', 'האי הצפוני': 'northIsland',
+        'Home': 'home', 'הבית': 'home',
+      };
+      const key = map[el.textContent.trim()];
+      if (key) el.textContent = t[key];
+    });
+
+    // hotel toggle button text
+    const htBtn = document.getElementById('hotel-toggle');
+    if (htBtn) {
+      const count = document.getElementById('hotel-count');
+      const countText = count ? count.textContent : '';
+      htBtn.childNodes[0].textContent = '🏨 ' + t.hotelsBtn + ' ';
+    }
+
+    // lang button label
+    document.getElementById('btn-lang').textContent = t.langToggle;
+
+    // re-render dynamic sections that contain translated strings
+    renderTodos();
+    renderHotels();
+    document.getElementById('calendar-root').innerHTML = '';
+    buildCalendar();
+  }
+
+  function applyTheme() {
+    const t = T[lang];
+    if (theme === 'light') {
+      document.body.classList.add('light');
+      document.getElementById('btn-theme').textContent = t.themeToggleLight;
+    } else {
+      document.body.classList.remove('light');
+      document.getElementById('btn-theme').textContent = t.themeToggleDark;
+    }
+  }
+
+  function toggleLang() {
+    lang = lang === 'en' ? 'he' : 'en';
+    localStorage.setItem('lang', lang);
+    applyLang();
+    applyTheme(); // refresh theme button label in new language
+  }
+
+  function toggleTheme() {
+    theme = theme === 'dark' ? 'light' : 'dark';
+    localStorage.setItem('theme', theme);
+    applyTheme();
+  }
+
   renderTodos();
   renderHotels();
   buildCalendar();
+  applyTheme();
+  applyLang();
 
   // Last updated
   document.getElementById('last-updated').textContent =
