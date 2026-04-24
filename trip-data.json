@@ -1,10 +1,35 @@
 {
   "FLIGHTS": [
-    { "date": "2026-11-01", "label": "✈️ TLV → BKK", "sub": "Departs 21:30 · El Al LY083",       "sleep": null },
-    { "date": "2026-11-02", "label": "✈️ Arrives Bangkok", "sub": "13:50 · El Al LY083",           "sleep": "Bangkok" },
-    { "date": "2026-11-03", "label": "✈️ BKK → SYD",    "sub": "Departs 18:00 · EK5151",          "sleep": null },
-    { "date": "2026-11-04", "label": "✈️ Arrives Sydney", "sub": "07:35 · EK5151",                 "sleep": "Sydney" },
-    { "date": "2026-11-09", "label": "✈️ SYD → CHC",    "sub": "Dep 08:45 · Arr 14:00 · EK412",  "sleep": "Christchurch" }
+    {
+      "date": "2026-11-01",
+      "label": "✈️ TLV → BKK",
+      "sub": "Departs 21:30 · El Al LY083",
+      "sleep": null
+    },
+    {
+      "date": "2026-11-02",
+      "label": "✈️ Arrives Bangkok",
+      "sub": "13:50 · El Al LY083",
+      "sleep": "Bangkok"
+    },
+    {
+      "date": "2026-11-03",
+      "label": "✈️ BKK → SYD",
+      "sub": "Departs 18:00 · EK5151",
+      "sleep": null
+    },
+    {
+      "date": "2026-11-04",
+      "label": "✈️ Arrives Sydney",
+      "sub": "07:35 · EK5151",
+      "sleep": "Sydney"
+    },
+    {
+      "date": "2026-11-09",
+      "label": "✈️ SYD → CHC",
+      "sub": "Dep 08:45 · Arr 14:00 · EK412",
+      "sleep": "Christchurch"
+    }
   ],
   "KNOWN_STAYS": {
     "2026-11-05": "Sydney",
@@ -16,7 +41,7 @@
     {
       "name": "Roger's",
       "city": "Christchurch",
-      "checkIn":  "2026-11-09",
+      "checkIn": "2026-11-09",
       "checkOut": "2026-11-14",
       "nights": 5,
       "confirmation": "",
@@ -24,13 +49,62 @@
       "notes": ""
     }
   ],
-  "ACTIVITIES": [],
+  "ACTIVITIES": [
+    {
+      "date": "2026-11-15",
+      "label": "Sleep in a cabin on an island",
+      "time": null,
+      "notes": "Need to be booked"
+    }
+  ],
   "TODOS": [
-    { "id": "passports",    "label": "New passports",                "labelHe": "דרכונים חדשים",           "notes": "All 5 family members",                    "notesHe": "כל 5 בני המשפחה",                     "done": false },
-    { "id": "visas-au",     "label": "Australia visas (ETA)",         "labelHe": "ויזות לאוסטרליה (ETA)",   "notes": "Apply online at immi.homeaffairs.gov.au", "notesHe": "הגשה אונליין ב-immi.homeaffairs.gov.au", "done": false },
-    { "id": "visas-nz",     "label": "New Zealand visas (NZeTA)",     "labelHe": "ויזות לניו זילנד (NZeTA)","notes": "Apply via the NZeTA app",                 "notesHe": "הגשה דרך אפליקציית NZeTA",             "done": false },
-    { "id": "insurance",    "label": "Travel insurance",              "labelHe": "ביטוח נסיעות",            "notes": "3-month multi-country, family of 5",      "notesHe": "3 חודשים, מדינות מרובות, משפחה של 5",  "done": false },
-    { "id": "intl-license", "label": "International driving licence", "labelHe": "רישיון נהיגה בינלאומי",   "notes": "Apply at post office (Lior + Sivan)",     "notesHe": "הגשה בסניף דואר (ליאור + סיון)",       "done": false },
-    { "id": "vaccinations", "label": "Vaccinations",                  "labelHe": "חיסונים",                 "notes": "Check requirements per country",          "notesHe": "לבדוק דרישות לכל מדינה",               "done": false }
+    {
+      "id": "passports",
+      "label": "New passports",
+      "labelHe": "דרכונים חדשים",
+      "notes": "All 5 family members",
+      "notesHe": "כל 5 בני המשפחה",
+      "done": false
+    },
+    {
+      "id": "visas-au",
+      "label": "Australia visas (ETA)",
+      "labelHe": "ויזות לאוסטרליה (ETA)",
+      "notes": "Apply online at immi.homeaffairs.gov.au",
+      "notesHe": "הגשה אונליין ב-immi.homeaffairs.gov.au",
+      "done": false
+    },
+    {
+      "id": "visas-nz",
+      "label": "New Zealand visas (NZeTA)",
+      "labelHe": "ויזות לניו זילנד (NZeTA)",
+      "notes": "Apply via the NZeTA app",
+      "notesHe": "הגשה דרך אפליקציית NZeTA",
+      "done": false
+    },
+    {
+      "id": "insurance",
+      "label": "Travel insurance",
+      "labelHe": "ביטוח נסיעות",
+      "notes": "3-month multi-country, family of 5",
+      "notesHe": "3 חודשים, מדינות מרובות, משפחה של 5",
+      "done": false
+    },
+    {
+      "id": "intl-license",
+      "label": "International driving licence",
+      "labelHe": "רישיון נהיגה בינלאומי",
+      "notes": "Apply at post office (Lior + Sivan)",
+      "notesHe": "הגשה בסניף דואר (ליאור + סיון)",
+      "done": false
+    },
+    {
+      "id": "vaccinations",
+      "label": "Vaccinations",
+      "labelHe": "חיסונים",
+      "notes": "Check requirements per country",
+      "notesHe": "לבדוק דרישות לכל מדינה",
+      "done": false
+    }
   ]
 }
