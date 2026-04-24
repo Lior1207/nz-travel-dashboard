@@ -105,6 +105,14 @@
       "notes": "Check requirements per country",
       "notesHe": "לבדוק דרישות לכל מדינה",
       "done": false
+    },
+    {
+      "id": "todo-1777022678524",
+      "label": "Buy a car",
+      "labelHe": "לקנות רכב",
+      "notes": "בקרייסטצ'רצ'",
+      "notesHe": "בקרייסטצ'רצ'",
+      "done": false
     }
   ]
 }
