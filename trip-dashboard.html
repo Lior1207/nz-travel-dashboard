@@ -635,11 +635,17 @@
 
   /* ── Controls bar ── */
   .controls {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
     display: flex;
-    justify-content: center;
-    gap: 0.6rem;
-    margin-top: 1.25rem;
-    flex-wrap: wrap;
+    gap: 0.5rem;
+    z-index: 100;
+  }
+
+  [dir="rtl"] .controls {
+    right: auto;
+    left: 1rem;
   }
 
   .ctrl-btn {
@@ -647,12 +653,13 @@
     border: 1px solid #263a5e;
     border-radius: 8px;
     color: #7891b5;
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     font-weight: 600;
-    padding: 0.4rem 0.9rem;
+    padding: 0.4rem 0.75rem;
     cursor: pointer;
     transition: background 0.15s, color 0.15s;
     letter-spacing: 0.03em;
+    backdrop-filter: blur(8px);
   }
 
   .ctrl-btn:hover  { background: #1e2d50; color: #c8d8f0; }
@@ -799,8 +806,8 @@
       </div>
       <div class="route-line"></div>
       <div class="route-node">
-        <div class="dot tbd">🏠</div>
-        <div class="name">Home</div>
+        <div class="dot tbd">❓</div>
+        <div class="name">TBD</div>
         <div class="week">Jan 2027</div>
       </div>
     </div>
@@ -1197,7 +1204,7 @@
       hotelsBtn: 'מלונות ולינה',
       hotelsNone: 'עוד אין מלונות מאושרים — יופיעו כאן כשיאושרו.',
       scheduleTitle: 'לוח זמנים',
-      southIsland: 'האי הדרומי', northIsland: 'האי הצפוני', home: 'הבית',
+      southIsland: 'האי הדרומי', northIsland: 'האי הצפוני', home: 'TBD',
       calDow: ['ב׳','ג׳','ד׳','ה׳','ו׳','ש׳','א׳'],
       langToggle: '🌐 English', themeToggleDark: '☀️ בהיר', themeToggleLight: '🌙 כהה',
     },
